@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>My Bookings - Lab Booking</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="topbar">
+        <h1>My Bookings</h1>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="mybookings.html">My Bookings</a>
+          <a href="login.html">Login</a>
+        </nav>
+        <div id="userInfo" class="user-info"></div>
+      </div>
+    </header>
+    <main>
+      <section style="max-width:900px;margin:16px auto;">
+        <div id="notLogged" class="muted">You are not logged in. <a href="login.html">Login</a> to see your bookings.</div>
+        <div id="bookingsArea" style="display:none;">
+          <h2>Your bookings</h2>
+          <table id="myBookingsTable"></table>
+        </div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+    <script>
+      async function renderMyBookings(){
+        const user = bookingApp.getCurrentUser();
+        const notLogged = document.getElementById('notLogged');
+        const area = document.getElementById('bookingsArea');
+        if(!user){ notLogged.style.display='block'; area.style.display='none'; return; }
+        notLogged.style.display='none'; area.style.display='block';
+
+        try {
+          const res = await fetch(`${bookingApp.API_BASE}/reservations`);
+          const allReservations = await res.json();
+          const myReservations = allReservations.filter(r => r.user_id === user.user_id);
+          
+          const table = document.getElementById('myBookingsTable');
+          table.innerHTML = '';
+          if(myReservations.length === 0){ 
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.className = 'muted';
+            td.colSpan = 4;
+            td.textContent = 'No bookings yet.';
+            tr.appendChild(td);
+            table.appendChild(tr);
+          } else {
+            const thead = document.createElement('thead');
+            const hrow = document.createElement('tr');
+            ['Equipment','Date','Time','Actions'].forEach(h=>{ const th=document.createElement('th'); th.textContent=h; hrow.appendChild(th); });
+            thead.appendChild(hrow); table.appendChild(thead);
+            
+            const tbody = document.createElement('tbody');
+            myReservations.forEach(res=>{
+              const tr = document.createElement('tr');
+              const tdEq = document.createElement('td'); tdEq.textContent = res.equipment_name; tr.appendChild(tdEq);
+              const tdDate = document.createElement('td'); tdDate.textContent = res.reservation_date; tr.appendChild(tdDate);
+              const tdTime = document.createElement('td'); tdTime.textContent = `${res.start_time} - ${res.end_time}`; tr.appendChild(tdTime);
+              const tdAct = document.createElement('td');
+              const cancelBtn = document.createElement('button'); cancelBtn.textContent='Cancel';
+              cancelBtn.addEventListener('click', async ()=>{ 
+                if(confirm('Cancel this booking?')){
+                  try {
+                    await fetch(`${bookingApp.API_BASE}/reservations/${res.reservation_id}`, {method: 'DELETE'});
+                    renderMyBookings();
+                  } catch(e) { alert('Failed to cancel'); }
+                }
+              });
+              tdAct.appendChild(cancelBtn);
+              tr.appendChild(tdAct);
+              tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+          }
+        } catch(e) {
+          console.error(e);
+          document.getElementById('myBookingsTable').innerHTML = '<tr><td colspan="4" class="muted">Failed to load bookings</td></tr>';
+        }
+      }
+
+      function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+      
+      document.addEventListener('DOMContentLoaded', async () => {
+        bookingApp.updateUserUI();
+        await renderMyBookings();
+      });
+    </script>
+  </body>
+</html>
