@@ -32,38 +32,6 @@
         </form>
       </section>
     </main>
-    <!--
-    <script src="app.js"></script>
-    <script>
-      async function tryApiLogin(email){
-        try{
-          const res = await fetch('http://localhost:3000/api/users/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
-          if(!res.ok) return {error:true, message:await res.text()};
-          const data = await res.json();
-          return data;
-        }catch(e){ console.error(e); return {error:true, network:true}; }
-      }
-
-      document.getElementById('loginForm').addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const email = document.getElementById('email').value.trim();
-        if(!email) return alert('Enter your email');
-        const result = await tryApiLogin(email);
-        if(result && !result.error && result.user){
-          bookingApp.setCurrentUser(result.user);
-          return;
-        }
-        if(result && result.network){
-          alert('Backend server is not running. Please start the server.');
-          return;
-        }
-        alert('Login failed: ' + (result.message || 'User not found. Please register first.'));
-      });
-      
-      document.addEventListener('DOMContentLoaded', () => {
-        bookingApp.updateUserUI();
-      });
-    </script>
-    -->
+     
   </body>
 </html>

@@ -34,40 +34,5 @@
         </form>
       </section>
     </main>
-   <!-- <script src="app.js"></script>
-    <script>
-      async function tryApiRegister(user_name, email, password){
-        try{
-          const res = await fetch('http://localhost:3000/api/users',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_name, email, password})});
-          if(!res.ok) return {error:true, message:await res.text()};
-          const data = await res.json();
-          return data;
-        }catch(e){ console.error(e); return {error:true, network:true}; }
-      }
-
-      document.getElementById('registerForm').addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const user_name = document.getElementById('userName').value.trim();
-        const email = document.getElementById('email').value.trim();
-        if(!user_name || !email) return alert('Enter name and email');
-        const result = await tryApiRegister(user_name, email);
-        if(result && !result.error && result.user_id){
-          // Get user data and store
-          const userData = {user_id: result.user_id, user_name, email};
-          bookingApp.setCurrentUser(userData);
-          return;
-        }
-        if(result && result.network){
-          alert('Backend server is not running. Please start the server.');
-          return;
-        }
-        alert('Registration failed: ' + (result.message || 'unknown'));
-      });
-      
-      document.addEventListener('DOMContentLoaded', () => {
-        bookingApp.updateUserUI();
-      });
-    </script>
-    -->
   </body>
 </html>
