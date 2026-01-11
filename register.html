@@ -20,9 +20,9 @@
     </header>
     <main>
       <section class="card" style="max-width:420px;margin:20px auto;">
-        <form id="registerForm">
-          <label for="userName">Name</label>
-          <input id="userName" name="userName" required placeholder="Your name" />
+        <form id="registerForm" action="register.php" method="POST">
+          <label for="username">Name</label>
+          <input id="username" name="username" required placeholder="Your name" />
           <label for="email" style="margin-top:8px">Email</label>
           <input id="email" name="email" type="email" required placeholder="your@email.com" />
           <label for="password">Password</label>
@@ -34,7 +34,7 @@
         </form>
       </section>
     </main>
-    <script src="app.js"></script>
+   <!-- <script src="app.js"></script>
     <script>
       async function tryApiRegister(user_name, email, password){
         try{
@@ -68,5 +68,6 @@
         bookingApp.updateUserUI();
       });
     </script>
+    -->
   </body>
 </html>
