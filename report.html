@@ -12,7 +12,7 @@
         <h1>Report an Issue</h1>
         <nav class="nav">
           <a href="index.html">Home</a>
-          <a href="mybookings.html">My Bookings</a>
+          <a href="mybookings.php">My Bookings</a>
           <a href="login.html">Login</a>
         </nav>
         <div id="userInfo" class="user-info"></div>
@@ -27,7 +27,7 @@
           <textarea id="message" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--surface-border)"></textarea>
           <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
             <button type="submit" class="btn primary">Submit Report</button>
-            <a href="mybookings.html" class="btn ghost">Cancel</a>
+            <a href="mybookings.php" class="btn ghost">Cancel</a>
           </div>
         </form>
       </section>
@@ -52,7 +52,7 @@
         // Try backend endpoint first
         try{
           const res = await fetch('/api/reports',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({bookingKey,message,username:user})});
-          if(res.ok){ alert('Report submitted to server.'); window.location.href='mybookings.html'; return; }
+          if(res.ok){ alert('Report submitted to server.'); window.location.href='mybookings.php'; return; }
         }catch(e){ /* ignore, fallback to local storage */ }
 
         // Fallback: save locally
@@ -60,7 +60,7 @@
         reports.push({ ts: Date.now(), user, bookingKey, message });
         bookingApp.saveReports(reports);
         alert('Report saved locally. The administrator can review it.');
-        window.location.href = 'mybookings.html';
+        window.location.href = 'mybookings.php';
       }
 
       document.addEventListener('DOMContentLoaded', ()=>{

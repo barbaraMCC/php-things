@@ -18,6 +18,12 @@
     ('$username','$email','$password')";
     if ($conn->query($insert_query) === TRUE) {
         echo "New record created successfully";
+
+        $last_id = $conn->insert_id;
+        session_start();
+        $_SESSION['user_id'] = $last_id;
+        $_SESSION['logged'] = true;
+        
     }
     else {
         echo "Error: " . $insert_query . "<br>" . $conn->error;

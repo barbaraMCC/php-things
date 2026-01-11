@@ -1,0 +1,30 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.html");
+    exit;
+}
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "lab_equipment";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+$reservation_id = $_POST['reservation_id'];
+$user_id = $_SESSION['user_id'];
+
+$stmt = $conn->prepare("
+    DELETE FROM reservation 
+    WHERE id = ? AND user_id = ?
+");
+$stmt->bind_param("ii", $reservation_id, $user_id);
+$stmt->execute();
+
+$stmt->close();
+$conn->close();
+
+header("Location: mybookings.php");
+exit;

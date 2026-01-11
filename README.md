@@ -11,7 +11,7 @@ Files:
 Additional pages:
 
 - `login.html` - Login page (stores a simple username in `localStorage`)
-- `mybookings.html` - Shows your personal bookings and allows reporting issues
+- `mybookings.php` - Shows your personal bookings and allows reporting issues
 
 Run (PowerShell):
 
@@ -28,7 +28,7 @@ Notes:
 Notes about authentication & reports:
 
 - This demo uses a simple client-side "login" (no password). The username is stored in `localStorage` and used to mark bookings.
-- Go to `login.html` to set your username before booking. Visit `mybookings.html` to see only your bookings and to submit problem reports for a booking.
+- Go to `login.html` to set your username before booking. Visit `mybookings.php` to see only your bookings and to submit problem reports for a booking.
 
 Future ideas:
 

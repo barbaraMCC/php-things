@@ -41,7 +41,7 @@ CREATE TABLE `equipment` (
 --
 
 CREATE TABLE `problem_report` (
-  `report_id` int(11) NOT NULL AUTO_INCREMENT,
+  `report_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `reservation_id` int(11) NOT NULL,
   `description` varchar(250) NOT NULL,
   `reported_at` datetime NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE `problem_report` (
 --
 
 CREATE TABLE `reservation` (
-  `reservation_id` int(11) NOT NULL AUTO_INCREMENT,
+  `reservation_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `user_id` int(11) NOT NULL,
   `equipment_id` int(11) NOT NULL,
   `reservation_date` date NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE `reservation` (
 --
 
 CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `user_name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(50) NOT NULL
@@ -86,29 +86,25 @@ CREATE TABLE `user` (
 --
 -- Indexes for table `equipment`
 --
-ALTER TABLE `equipment`
-  ADD PRIMARY KEY (`equipment_id`);
+
 
 --
 -- Indexes for table `problem_report`
 --
 ALTER TABLE `problem_report`
-  ADD PRIMARY KEY (`report_id`),
   ADD KEY `reservation_id` (`reservation_id`);
 
 --
 -- Indexes for table `reservation`
 --
 ALTER TABLE `reservation`
-  ADD PRIMARY KEY (`reservation_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `equipment_id` (`equipment_id`);
 
 --
 -- Indexes for table `user`
 --
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
+
 
 --
 -- Constraints for dumped tables
