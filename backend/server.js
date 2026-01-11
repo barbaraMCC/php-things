@@ -9,7 +9,7 @@ const dbConfig = {
   host: 'localhost',
   user: 'root',
   password: '', // 비밀번호를 설정하세요
-  database: 'lab_equipment_res'
+  database: 'lab_equipment'
 };
 
 let pool;
