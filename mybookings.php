@@ -3,7 +3,7 @@ session_start();
 
 // Protection : rediriger si pas connecté
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
+    header("Location: login.php");
     exit;
 }
 
@@ -51,18 +51,18 @@ $result = $stmt->get_result();
       <div class="topbar">
         <h1>My Bookings</h1>
         <nav class="nav">
-          <a href="index.html">Home</a>
+          <a href="index.php">Home</a>
           <a href="mybookings.php">My Bookings</a>
-          <a href="login.html">Login</a>
+          <a href="login.php">Login</a>
         </nav>
         <div id="userInfo" class="user-info"></div>
       </div>
     </header>
     <main>
       <section style="max-width:900px;margin:16px auto;">
-      <?php if (!$_SESSION['logged']): ?>
+      <?php if (!isset($_SESSION['user_id'])): ?>
       <div class="muted">
-        You are not logged in. <a href="login.html">Login</a> to see your bookings.
+        You are not logged in. <a href="login.php">Login</a> to see your bookings.
       </div>
     <?php else: ?>
       <div id="bookingsArea">
@@ -104,7 +104,7 @@ $result = $stmt->get_result();
 </html>
 
 <?php
-if ($_SESSION['logged']) {
+if (isset($_SESSION['user_id'])) {
     $stmt->close();
     $conn->close();
 }

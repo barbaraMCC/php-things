@@ -4,19 +4,19 @@ This is a simple client-side demo. Open the files in the `web` folder in a brows
 
 Files:
 
-- `index.html` - Main page
+- `index.php` - Main page
 - `styles.css` - Styling
 - `app.js` - Booking logic (stores state in `localStorage`)
 
 Additional pages:
 
-- `login.html` - Login page (stores a simple username in `localStorage`)
+- `login.php` - Login page (stores a simple username in `localStorage`)
 - `mybookings.php` - Shows your personal bookings and allows reporting issues
 
 Run (PowerShell):
 
 ```powershell
-Start-Process -FilePath "${PWD.Path}\web\index.html"
+Start-Process -FilePath "${PWD.Path}\web\index.php"
 ```
 
 Notes:
@@ -28,7 +28,7 @@ Notes:
 Notes about authentication & reports:
 
 - This demo uses a simple client-side "login" (no password). The username is stored in `localStorage` and used to mark bookings.
-- Go to `login.html` to set your username before booking. Visit `mybookings.php` to see only your bookings and to submit problem reports for a booking.
+- Go to `login.php` to set your username before booking. Visit `mybookings.php` to see only your bookings and to submit problem reports for a booking.
 
 Future ideas:
 

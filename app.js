@@ -49,29 +49,6 @@ async function saveReport(reservationId, description) {
   }
 }
 
-function getCurrentUser() {
-  const userData = localStorage.getItem(USER_KEY);
-  if (!userData) return null;
-  try {
-    return JSON.parse(userData);
-  } catch (e) {
-    return null;
-  }
-}
-
-function setCurrentUser(userData) {
-  if (userData) {
-    localStorage.setItem(USER_KEY, JSON.stringify(userData));
-    currentUserId = userData.user_id;
-  } else {
-    localStorage.removeItem(USER_KEY);
-    currentUserId = null;
-  }
-  updateUserUI();
-  setTimeout(() => window.location.href = 'index.html', 500);
-}
-
-
 function logout() {
   localStorage.removeItem(USER_KEY);
   currentUserId = null;
@@ -87,16 +64,13 @@ function makeHours(start, end){
 function updateUserUI() {
   const el = document.getElementById('userInfo');
   if (!el) return;
-  const user = getCurrentUser();
-  if (user) {
-    el.innerHTML = `<span class="user">${escapeHtml(user.user_name || user.email)}</span> <button id="logoutBtn">Logout</button>`;
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', () => {
-        logout();
-        window.location.href = 'index.html';
-      });
-    }
+
+  const user = bookingApp.currentUser;
+  if (user && bookingApp.loggedIn) {
+    el.innerHTML = `<button id="logoutBtn">Logout</button>`;
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      window.location.href = 'logout.php'; // créer un logout simple
+    });
   } else {
     el.innerHTML = '';
   }
@@ -138,7 +112,7 @@ async function render() {
 
   const tbody = document.createElement('tbody');
   currentReservations = await loadReservations(selectedDate);
-  const user = getCurrentUser();
+  const user = bookingApp.currentUser;
 
   EQUIPMENT.forEach((eq, ri) => {
     const tr = document.createElement('tr');
@@ -187,7 +161,7 @@ function pad(n) {
   return n.toString().padStart(2, '0');
 }
 
-// Modal helpers (use the modal in index.html for nicer confirmations)
+// Modal helpers (use the modal in index.php for nicer confirmations)
 let _modalResolve = null;
 function initModal() {
   const modal = document.getElementById('modal');
@@ -232,10 +206,15 @@ function initModal() {
 }
 
 async function toggleBooking(eq, h, existingReservation) {
-  const user = getCurrentUser();
-  if (!user) {
-    const go = await showConfirm('Login required', 'You must be logged in to book. Go to login page?');
-    if (go) window.location.href = 'login.html';
+   const user = bookingApp.currentUser;
+  
+  // Pop-up si pas connecté
+  if (!bookingApp.loggedIn || !user || user.user_id === null) {
+    const go = await showConfirm(
+      'Login required',
+      'You must be logged in to book. Go to login page?'
+    );
+    if (go) window.location.href = 'login.php';
     return;
   }
 
@@ -299,7 +278,7 @@ async function toggleBooking(eq, h, existingReservation) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadEquipment();
-  const userData = getCurrentUser();
+  const userData = bookingApp.currentUser;
   if (userData) {
     currentUserId = userData.user_id;
   }
@@ -322,13 +301,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // Expose helpers for other pages (login/mybookings)
-window.bookingApp = {
-  getCurrentUser,
-  setCurrentUser,
-  logout,
-  API_BASE,
-  loadReservations,
-  saveReport,
-  loadEquipment,
-  updateUserUI
-};
+window.bookingApp.logout = logout;
+window.bookingApp.API_BASE = API_BASE;
+window.bookingApp.loadReservations = loadReservations;
+window.bookingApp.saveReport = saveReport;
+window.bookingApp.loadEquipment = loadEquipment;
+window.bookingApp.updateUserUI = updateUserUI;
+// rajoute juste ça si jamais elle n'existe pas encore
+window.bookingApp.currentUser = window.bookingApp.currentUser || null;
+

@@ -11,16 +11,16 @@
       <div class="topbar">
         <h1>Report an Issue</h1>
         <nav class="nav">
-          <a href="index.html">Home</a>
+          <a href="index.php">Home</a>
           <a href="mybookings.php">My Bookings</a>
-          <a href="login.html">Login</a>
+          <a href="login.php">Login</a>
         </nav>
         <div id="userInfo" class="user-info"></div>
       </div>
     </header>
     <main>
       <section class="card" style="max-width:720px;margin:20px auto;">
-        <div id="notLogged" class="muted">You must be logged in to submit a report. <a href="login.html">Login</a></div>
+        <div id="notLogged" class="muted">You must be logged in to submit a report. <a href="login.php">Login</a></div>
         <form id="reportForm" style="display:none;">
           <div><strong>Booking:</strong> <span id="bookingKey"></span></div>
           <label for="message">Describe the problem</label>
@@ -43,7 +43,7 @@
 
       async function submitReport(e){
         e.preventDefault();
-        const user = bookingApp.getCurrentUser();
+        const user = bookingApp.currentUser;
         if(!user) return alert('Login required');
         const bookingKey = getQuery('booking');
         const message = document.getElementById('message').value.trim();
@@ -65,7 +65,7 @@
 
       document.addEventListener('DOMContentLoaded', ()=>{
         const bookingKey = getQuery('booking');
-        const user = bookingApp.getCurrentUser();
+        const user = bookingApp.currentUser;
         if(!user){ document.getElementById('notLogged').style.display='block'; return; }
         document.getElementById('notLogged').style.display='none';
         document.getElementById('reportForm').style.display='block';

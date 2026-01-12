@@ -18,9 +18,9 @@ $loggedIn = isset($_SESSION['user_id']);
       <div class="topbar">
         <h1>Lab Equipment Booking </h1>
         <nav class="nav">
-          <a href="index.html">Home</a>
+          <a href="index.php">Home</a>
           <a href="mybookings.php">My Bookings</a>
-          <a href="login.html">Login</a>
+          <a href="login.php">Login</a>
         </nav>
         <div id="userInfo" class="user-info"></div>
       </div>
@@ -53,7 +53,16 @@ $loggedIn = isset($_SESSION['user_id']);
       </div>
     </div>
 
-   <!-- //TODO smtg i guess -->
+   
+<script>
+  window.bookingApp = window.bookingApp || {};
+  window.bookingApp.loggedIn = <?= $loggedIn ? 'true' : 'false' ?>;
+  window.bookingApp.currentUser = {
+    user_id: <?= $loggedIn ? $_SESSION['user_id'] : 'null' ?>,
+  };
+</script>
+
+
 
     <script src="app.js"></script>
     <script>

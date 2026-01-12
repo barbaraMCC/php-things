@@ -22,7 +22,6 @@
         $last_id = $conn->insert_id;
         session_start();
         $_SESSION['user_id'] = $last_id;
-        $_SESSION['logged'] = true;
         
     }
     else {
@@ -31,6 +30,6 @@
 
     $conn->close();
  }
- header("Location: index.html");
+ header("Location: index.php");
  exit;
 ?>
