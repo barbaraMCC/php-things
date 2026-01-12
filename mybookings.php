@@ -26,7 +26,8 @@ $stmt = $conn->prepare("
            e.equipment_name AS equipment_name,
            r.reservation_date,
            r.start_time,
-           r.end_time
+           r.end_time,
+           r.status AS status
     FROM reservation r
     JOIN equipment e ON r.equipment_id = e.equipment_id
     WHERE r.user_id = ?
@@ -86,11 +87,16 @@ $result = $stmt->get_result();
                               <td><?= htmlspecialchars($row['reservation_date']) ?></td>
                               <td><?= htmlspecialchars($row['start_time']) ?> - <?= htmlspecialchars($row['end_time']) ?></td>
                               <td>
-                                  <form action="cancel_booking.php" method="POST" style="display:inline;">
-                                      <input type="hidden" name="reservation_id" value="<?= $row['reservation_id'] ?>">
-                                      <button type="submit" onclick="return confirm('Cancel this booking?')">Cancel</button>
-                                  </form>
-                              </td>
+                                <?php if ($row['status'] === 'canceled'): ?>
+                                    <span style="color: gray; font-weight: bold;">Canceled</span>
+                                <?php else: ?>
+                                    <form action="cancel_booking.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="reservation_id" value="<?= $row['reservation_id'] ?>">
+                                        <button type="submit" onclick="return confirm('Cancel this booking?')">Cancel</button>
+                                    </form>
+                                <?php endif; ?>
+                            </td>
+
                           </tr>
                       <?php endwhile; ?>
                   </tbody>

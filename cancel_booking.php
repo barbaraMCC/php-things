@@ -17,8 +17,9 @@ $reservation_id = $_POST['reservation_id'];
 $user_id = $_SESSION['user_id'];
 
 $stmt = $conn->prepare("
-    DELETE FROM reservation 
-    WHERE id = ? AND user_id = ?
+    UPDATE reservation
+    SET status = 'canceled'
+    WHERE reservation_id = ? AND user_id = ?
 ");
 $stmt->bind_param("ii", $reservation_id, $user_id);
 $stmt->execute();

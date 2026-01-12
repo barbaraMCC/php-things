@@ -1,4 +1,3 @@
-const API_BASE = 'http://localhost:3000/api';
 
 let EQUIPMENT = []; // Will be loaded from database
 
@@ -8,24 +7,27 @@ let currentUserId = null;
 
 async function loadEquipment() {
   try {
-    const res = await fetch(`${API_BASE}/equipment`);
+    const res = await fetch('get_equipment.php');
     const data = await res.json();
+
     EQUIPMENT = data.map(eq => eq.equipment_name);
     equipmentMap = {};
     data.forEach(eq => {
       equipmentMap[eq.equipment_name] = eq.equipment_id;
     });
+
   } catch (e) {
     console.error('Failed to load equipment:', e);
-    // Fallback to default equipment list
+    // Fallback
     EQUIPMENT = ['Microscope A', 'Microscope B', 'Oscilloscope', '3D Printer', 'Spectrometer', 'Centrifuge'];
   }
 }
 
+
 async function loadReservations(date) {
   try {
     const dateStr = date || new Date().toISOString().split('T')[0];
-    const res = await fetch(`${API_BASE}/reservations?date=${dateStr}`);
+    const res = await fetch('get_reservations.php?date=' + dateStr);
     const data = await res.json();
     return data;
   } catch (e) {
@@ -209,7 +211,7 @@ async function toggleBooking(eq, h, existingReservation) {
    const user = bookingApp.currentUser;
   
   // Pop-up si pas connecté
-  if (!bookingApp.loggedIn || !user || user.user_id === null) {
+  if (!window.bookingApp.loggedIn || !user || !user.user_id) {
     const go = await showConfirm(
       'Login required',
       'You must be logged in to book. Go to login page?'
@@ -227,14 +229,18 @@ async function toggleBooking(eq, h, existingReservation) {
     if (!ok) return;
     
     try {
-      const res = await fetch(`${API_BASE}/reservations/${existingReservation.reservation_id}`, {
-        method: 'DELETE'
+      const res = await fetch('cancel_booking.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `reservation_id=${existingReservation.reservation_id}`
       });
+
       if (res.ok) {
         await render();
       } else {
         alert('Failed to cancel booking');
       }
+
     } catch (e) {
       console.error(e);
       alert('Failed to cancel booking');
@@ -250,7 +256,11 @@ async function toggleBooking(eq, h, existingReservation) {
     }
 
     try {
-      const res = await fetch(`${API_BASE}/reservations`, {
+      const now = new Date();
+      const pad = n => n.toString().padStart(2, '0');
+      const formattedNow = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+      const res = await fetch('create_reservation.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -259,6 +269,8 @@ async function toggleBooking(eq, h, existingReservation) {
           reservation_date: selectedDate,
           start_time: `${pad(h)}:00:00`,
           end_time: `${pad(h + 1)}:00:00`,
+          created_at: formattedNow,
+          status: 'In progress',
           purpose: 'Lab work'
         })
       });
@@ -302,7 +314,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Expose helpers for other pages (login/mybookings)
 window.bookingApp.logout = logout;
-window.bookingApp.API_BASE = API_BASE;
 window.bookingApp.loadReservations = loadReservations;
 window.bookingApp.saveReport = saveReport;
 window.bookingApp.loadEquipment = loadEquipment;
