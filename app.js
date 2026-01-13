@@ -84,6 +84,7 @@ function escapeHtml(s) {
 }
 
 let currentReservations = [];
+// On initialise avec la date du jour au format YYYY-MM-DD
 let selectedDate = new Date().toISOString().split('T')[0];
 
 async function render() {
@@ -292,12 +293,31 @@ async function toggleBooking(eq, h, existingReservation) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadEquipment();
+  
   const userData = bookingApp.currentUser;
   if (userData) {
     currentUserId = userData.user_id;
   }
   updateUserUI();
   initModal();
+
+  // --- NOUVELLE LOGIQUE POUR LA DATE ---
+  const dateInput = document.getElementById('bookingDate');
+  const today = new Date().toISOString().split('T')[0];
+  
+  // 1. On empêche de sélectionner une date dans le passé (min = aujourd'hui)
+  dateInput.setAttribute('min', today);
+  
+  // 2. On définit la valeur par défaut sur aujourd'hui
+  dateInput.value = today;
+  selectedDate = today;
+
+  // 3. On écoute le changement de date
+  dateInput.addEventListener('change', (e) => {
+    selectedDate = e.target.value;
+    render(); // On redessine le tableau pour la nouvelle date choisie
+  });
+  // -------------------------------------
   
   await render();
 });

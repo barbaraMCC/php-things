@@ -66,3 +66,38 @@ footer{margin-top:24px;color:var(--muted);max-width:1200px;margin-left:auto;marg
 .card form input{width:100%;padding:10px;border:1px solid var(--surface-border);border-radius:8px;background:transparent}
 .card form button{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
 .card form a.muted{align-self:center;padding:8px 10px}
+
+/* Modifiez ce bloc existant */
+.controls {
+  display: flex;
+  flex-direction: column; /* Aligne les éléments verticalement */
+  gap: 12px;              /* Espace entre les heures et le sélecteur de date */
+  align-items: flex-start; /* Aligne tout à gauche */
+  margin-bottom: 24px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Ajoutez ou modifiez ce bloc pour le label */
+.date-picker-container label {
+  font-weight: 600;       /* Met le texte en gras pour la cohésion avec .fixed-hours */
+  color: #0f172a;         /* Même couleur que les heures */
+  display: block;         /* S'assure que le label est bien au-dessus de son input */
+  margin-bottom: 6px;
+}
+
+.date-picker-container input {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+  background: var(--card);
+  color: #0f172a;
+  font-size: 14px;
+  outline: none;
+}
+
+.date-picker-container input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
+}

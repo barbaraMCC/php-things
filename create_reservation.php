@@ -20,6 +20,15 @@ if (!$input) {
 $user_id = $_SESSION['user_id']; // 🔐 on ne fait PAS confiance au JS
 $equipment_id = $input['equipment_id'] ?? null;
 $reservation_date = $input['reservation_date'] ?? null;
+if ($reservation_date) {
+    $today = date('Y-m-d');
+    if ($reservation_date < $today) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Vous ne pouvez pas réserver dans le passé.']);
+        exit;
+    }
+}
+
 $start_time = $input['start_time'] ?? null;
 $end_time = $input['end_time'] ?? null;
 $purpose = $input['purpose'] ?? '';
