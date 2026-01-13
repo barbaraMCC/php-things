@@ -30,7 +30,6 @@ $loggedIn = isset($_SESSION['user_id']);
     <main>
       <div class="controls">
         <div class="fixed-hours">Hours: 09:00 - 20:00</div>
-        <button id="clearAll">Clear All</button>
       </div>
 
       <div class="table-wrap">

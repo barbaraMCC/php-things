@@ -25,7 +25,8 @@ SELECT
   e.equipment_name,
   r.reservation_date,
   r.start_time,
-  r.end_time
+  r.end_time,
+  r.status
 FROM reservation r
 JOIN equipment e ON r.equipment_id = e.equipment_id
 WHERE r.reservation_date = ?

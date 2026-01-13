@@ -27,7 +27,8 @@ async function loadEquipment() {
 async function loadReservations(date) {
   try {
     const dateStr = date || new Date().toISOString().split('T')[0];
-    const res = await fetch('get_reservations.php?date=' + dateStr);
+    const res = await fetch('get_reservations.php?date=' + dateStr ,
+  { cache: 'no-store' });
     const data = await res.json();
     return data;
   } catch (e) {
@@ -132,6 +133,7 @@ async function render() {
       // 해당 시간에 이 장비의 예약이 있는지 확인
       const reservation = currentReservations.find(r => {
         const match = r.equipment_name === eq &&
+               r.status.trim() !== 'canceled' &&
                r.reservation_date === selectedDate &&
                parseInt(r.start_time.split(':')[0]) <= h &&
                parseInt(r.end_time.split(':')[0]) > h;
@@ -140,7 +142,7 @@ async function render() {
 
       if (reservation) {
         td.classList.add('booked');
-        td.title = `Booked by ${reservation.user_name} (${reservation.email})`;
+        td.title = `Booked by user ${reservation.user_id} `;
         td.textContent = 'X';
         if (user && reservation.user_id === user.user_id) {
           td.classList.add('mine');
@@ -296,18 +298,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   updateUserUI();
   initModal();
-  
-  // attach clearAll if present (use modal)
-  const clearBtn = document.getElementById('clearAll');
-  if (clearBtn) {
-    clearBtn.addEventListener('click', async () => {
-      const ok = await showConfirm('Clear all', 'Clear all reservations?');
-      if (ok) {
-        // API로 모든 예약 삭제 (관리자 기능 - 추후 구현)
-        alert('Admin function - not implemented');
-      }
-    });
-  }
   
   await render();
 });
