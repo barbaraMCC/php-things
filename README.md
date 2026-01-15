@@ -1,53 +1,91 @@
-# Lab Equipment Booking (Demo)
+# Lab Equipment Booking 
+A real-time web application designed to manage and streamline the reservation of laboratory instruments.
 
-This is a simple client-side demo. Open the files in the `web` folder in a browser to try it.
+🚀 Features
+- Interactive Booking Grid: A dynamic schedule (09:00 - 20:00) showing real-time availability for all lab equipment.
 
-Files:
+- Smart Visual Cues:
 
-- `index.php` - Main page
-- `styles.css` - Styling
-- `app.js` - Booking logic (stores state in `localStorage`)
+    - Red Slots: Your own active bookings.
 
-Additional pages:
+    - Grey Slots: Equipment reserved by other users (non-clickable).
 
-- `login.php` - Login page (stores a simple username in `localStorage`)
-- `mybookings.php` - Shows your personal bookings and allows reporting issues
+- Advanced "My Bookings" Management:
 
-Run (PowerShell):
+    - Multi-criteria Filtering: Filter by equipment name, specific date, or hide canceled reservations using a modern horizontal filter bar.
 
-```powershell
-Start-Process -FilePath "${PWD.Path}\web\index.php"
-```
+    - Time-Sensitive Actions: The system automatically hides the "Cancel" button for past reservations while keeping the "Report Issue" option available.
 
-Notes:
+- Security First:
 
-- The left column lists equipment.
-- The top row shows hourly timeslots.
-- Click a cell to book or cancel (confirmation). Booked cells display `X`.
+    - Secure Authentication with BCRYPT password hashing.
 
-Notes about authentication & reports:
+    - Full protection against SQL Injections using Prepared Statements.
 
-- This demo uses a simple client-side "login" (no password). The username is stored in `localStorage` and used to mark bookings.
-- Go to `login.php` to set your username before booking. Visit `mybookings.php` to see only your bookings and to submit problem reports for a booking.
+    - Session-based access control for private pages.
 
-Future ideas:
+🛠️ Installation
 
-- Multi-user backend: Add an API + database for concurrency control and real-time sync.
-- User accounts and name display for bookings.
- 
-Backend prototype (Node + SQLite)
+Prerequisites
+    - A local server environment (XAMPP, WAMP, MAMP, or LAMP).
 
-I added a small prototype backend under `web/backend` that you can run to add real SQL-backed accounts:
+    - PHP 7.4+
 
-- `web/backend/package.json` - Node deps and start script
-- `web/backend/server.js` - Simple Express server with `/api/register` and `/api/login` endpoints and SQLite DB
+    - MySQL/MariaDB
 
-Run the backend (requires Node.js installed):
+Setup
+1. Database: Create a database named lab_equipment.
 
-```powershell
-Set-Location e:\web\backend
-npm install
-node server.js
-```
+2. Tables: Import your SQL schema.
 
-The server serves the static `web` folder at `http://localhost:3000` as well. If the backend is running, the login/register pages will call the API; otherwise they fall back to local (browser-only) accounts.
+    - Note: Ensure the password column in the user table is set to VARCHAR(255) to accommodate the secure hash.
+
+3. Files: Clone or move the project files into your server's root directory (e.g., htdocs or var/www/html).
+
+4. Database Connection: If necessary, update the credentials in the PHP files ($servername, $username, $password).
+
+📂 Project Structure
+- index.php: The main dashboard featuring the equipment/time booking matrix.
+
+- app.js: Core frontend logic, including the dynamic modal system and asynchronous API calls.
+
+- styles.css: Global styling, featuring custom variables for easy theme adjustments and responsive layouts.
+
+- mybookings.php: Personal user area with advanced filtering logic and booking history.
+
+- login.php / register.php: Secure entry points for user management.
+
+- create_reservation.php / cancel_booking.php: Backend API endpoints for database transactions.
+
+📝 Usage
+1. Register/Login: Create an account to start booking.
+
+2. Select a Date: Use the date picker on the Home page to view availability for a specific day.
+
+3. Book a Slot: Click on an empty cell. A confirmation modal will appear.
+
+4. Manage: Go to "My Bookings" to view your history. Use the horizontal filter bar to find specific entries or report an issue with a past booking.    
+
+## System Design (ERD)
+
+This application was developed based on the database structure defined in the following Entity-Relationship Diagram.
+
+![ER Diagram](ERD%2020251212.png)
+*Figure 1: System Database Schema*
+
+### Application Screenshots
+
+Below is a visual overview of the user interface and key features:
+
+| **1. Log in Page** | **2. Default Homepage** |
+| :--- | :--- |
+| ![Login Page](Log%20in%20page.png)<br>Entry point for user authentication to access booking features. | ![Default Homepage](Default%20homepage.png)<br>The main dashboard displaying the schedule grid and equipment availability. |
+
+| **3. Booking an Equipment** | **4. Booking Multiple Equipments** |
+| :--- | :--- |
+| ![Booking 1 equipment](Booking%201%20equipment.png)<br>Users can select specific time slots to make a single reservation. | ![Booking multi equipments](Booking%20multi%20equipments.png)<br>Support for selecting and reserving multiple slots or different equipment simultaneously. |
+
+| **5. My Bookings** | **6. Report Issue** |
+| :--- | :--- |
+| ![My Bookings](My%20booking.png)<br>A personalized view for users to manage their active reservations. | ![Report](Report.png)<br>Interface allowing users to submit problem reports for specific equipment bookings. ||
+

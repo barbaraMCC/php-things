@@ -28,7 +28,9 @@
      if ($result->num_rows === 1) {
         $row = $result->fetch_assoc();
 
-        if ($row['password'] === $password) {
+        $hashed_password = $row['password'];
+
+        if (password_verify($password, $hashed_password)){
             // Login success
             $_SESSION['user_id'] = $row['user_id'];
             header("Location: index.php");

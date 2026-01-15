@@ -12,10 +12,13 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = $_POST['username'];
         $email = $_POST['email'];
-        $password = $_POST['password'];
+        $pass = $_POST['password'];
     }
+
+    $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
+
     $insert_query = "INSERT INTO user (user_name,email,password) VALUES
-    ('$username','$email','$password')";
+    ('$username','$email','$hashed_password')";
     if ($conn->query($insert_query) === TRUE) {
         echo "New record created successfully";
 
