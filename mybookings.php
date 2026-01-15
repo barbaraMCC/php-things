@@ -36,6 +36,7 @@ $stmt = $conn->prepare("
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
+$now = new DateTime();
 
 ?>
 
@@ -102,13 +103,21 @@ $result = $stmt->get_result();
                               <td> #<?= $row['reservation_id'] ?> </td>
 
                               <td class="actions-cell">
+                                <?php 
+                                    // On crée un objet DateTime pour le début de cette réservation précise
+                                    $bookingStart = new DateTime($row['reservation_date'] . ' ' . $row['start_time']);
+                                    $isPast = $bookingStart < $now; 
+                                ?>
+
                                 <?php if ($row['status'] === 'canceled'): ?>
                                     <span style="color: gray; font-weight: bold;">Canceled</span>
                                 <?php else: ?>
+                                    <?php if (!$isPast): ?>
                                     <form action="cancel_booking.php" method="POST" style="display:inline;">
                                         <input type="hidden" name="reservation_id" value="<?= $row['reservation_id'] ?>">
                                         <button type="submit" onclick="return confirm('Cancel this booking?')">Cancel</button>
                                     </form>
+                                    <?php endif; ?>
                                     <button type="button" class="btn-report" onclick="window.location.href='make_report.php?id=<?= $row['reservation_id'] ?>'">
                                         Report Issue
                                     </button>
