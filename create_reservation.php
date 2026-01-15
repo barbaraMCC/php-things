@@ -31,9 +31,11 @@ if ($reservation_date) {
 
 $start_time = $input['start_time'] ?? null;
 $end_time = $input['end_time'] ?? null;
+$created_at = $input['created_at'] ?? null;
+$status = $input['status'] ?? '';
 $purpose = $input['purpose'] ?? '';
 
-if (!$equipment_id || !$reservation_date || !$start_time || !$end_time) {
+if (!$equipment_id || !$reservation_date || !$start_time || !$end_time || !$created_at) {
     http_response_code(400);
     echo json_encode(['error' => 'Missing fields']);
     exit;
@@ -47,17 +49,19 @@ if ($conn->connect_error) {
 }
 
 $stmt = $conn->prepare("
-  INSERT INTO reservation (user_id, equipment_id, reservation_date, start_time, end_time, purpose)
-  VALUES (?, ?, ?, ?, ?, ?)
+  INSERT INTO reservation (user_id, equipment_id, reservation_date, start_time, end_time, status, created_at, purpose)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 ");
 
 $stmt->bind_param(
-  "iissss",
+  "iissssss",
   $user_id,
   $equipment_id,
   $reservation_date,
   $start_time,
   $end_time,
+  $status,
+  $created_at,
   $purpose
 );
 

@@ -30,7 +30,6 @@ $loggedIn = isset($_SESSION['user_id']);
     <main>
       <div class="controls">
         <div class="fixed-hours">Hours: 09:00 - 20:00</div>
-        <br>
         <div class="date-picker-container">
           <label for="bookingDate">Date of booking :</label>
           <input type="date" id="bookingDate" />
