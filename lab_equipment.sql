@@ -43,7 +43,7 @@ CREATE TABLE `equipment` (
 CREATE TABLE `problem_report` (
   `report_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `reservation_id` int(11) NOT NULL,
-  `description` varchar(250) NOT NULL,
+  `description` varchar(600) NOT NULL,
   `reported_at` datetime NOT NULL,
   `status` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

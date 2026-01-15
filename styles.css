@@ -101,3 +101,57 @@ footer{margin-top:24px;color:var(--muted);max-width:1200px;margin-left:auto;marg
   border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
 }
+
+/* --- Boutons d'actions dans le tableau --- */
+
+/* Conteneur pour aligner les boutons horizontalement */
+.actions-cell {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style de base pour les boutons de la colonne Action */
+.actions-cell button, 
+.actions-cell .btn-report {
+  padding: 6px 12px;
+  border-radius: 8px; /* Coins arrondis cohérents avec ton design */
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+/* Style spécifique pour "Report Issue" - Version renforcée */
+button.btn-report {
+  background-color: var(--booked) !important; /* Le !important force la couleur */
+  color: white !important;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button.btn-report:hover {
+  background-color: #dc2626 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+}
+
+
+/* Style pour le bouton Cancel (s'il n'en a pas déjà un spécifique) */
+.actions-cell form button {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid var(--surface-border);
+}
+
+.actions-cell form button:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}

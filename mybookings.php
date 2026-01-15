@@ -67,6 +67,13 @@ $result = $stmt->get_result();
       </div>
     <?php else: ?>
       <div id="bookingsArea">
+        
+      <?php if (isset($_GET['report']) && $_GET['report'] === 'success'): ?>
+            <div style="background: #dcfce7; color: #166534; padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #bbf7d0;">
+                ✅ <b>Success!</b> Your report has been saved.
+            </div>
+        <?php endif; ?>
+
           <h2>Your bookings</h2>
           <?php if ($result->num_rows === 0): ?>
               <p class="muted">No bookings yet.</p>
@@ -77,6 +84,7 @@ $result = $stmt->get_result();
                           <th>Equipment</th>
                           <th>Date</th>
                           <th>Time</th>
+                          <th>Booking number</th>
                           <th>Actions</th>
                       </tr>
                   </thead>
@@ -85,8 +93,15 @@ $result = $stmt->get_result();
                           <tr>
                               <td><?= htmlspecialchars($row['equipment_name']) ?></td>
                               <td><?= htmlspecialchars($row['reservation_date']) ?></td>
-                              <td><?= htmlspecialchars($row['start_time']) ?> - <?= htmlspecialchars($row['end_time']) ?></td>
                               <td>
+                                 <?= htmlspecialchars(date('H:i', strtotime($row['start_time']))) ?>
+                                  -
+                                 <?= htmlspecialchars(date('H:i', strtotime($row['end_time']))) ?>
+                              </td>
+                              
+                              <td> #<?= $row['reservation_id'] ?> </td>
+
+                              <td class="actions-cell">
                                 <?php if ($row['status'] === 'canceled'): ?>
                                     <span style="color: gray; font-weight: bold;">Canceled</span>
                                 <?php else: ?>
@@ -94,6 +109,9 @@ $result = $stmt->get_result();
                                         <input type="hidden" name="reservation_id" value="<?= $row['reservation_id'] ?>">
                                         <button type="submit" onclick="return confirm('Cancel this booking?')">Cancel</button>
                                     </form>
+                                    <button type="button" class="btn-report" onclick="window.location.href='make_report.php?id=<?= $row['reservation_id'] ?>'">
+                                        Report Issue
+                                    </button>
                                 <?php endif; ?>
                             </td>
 
