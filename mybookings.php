@@ -170,10 +170,13 @@ $eq_list = $conn->query("SELECT equipment_name FROM equipment");
                                         <input type="hidden" name="reservation_id" value="<?= $row['reservation_id'] ?>">
                                         <button type="submit" onclick="return confirm('Cancel this booking?')">Cancel</button>
                                     </form>
+
+                                    <?php endif; ?><?php if ($isPast): ?>
+                                        <button type="button" class="btn-report" onclick="window.location.href='make_report.php?id=<?= $row['reservation_id'] ?>'">
+                                            Report Issue
+                                        </button>
                                     <?php endif; ?>
-                                    <button type="button" class="btn-report" onclick="window.location.href='make_report.php?id=<?= $row['reservation_id'] ?>'">
-                                        Report Issue
-                                    </button>
+                                    
                                 <?php endif; ?>
                             </td>
 
