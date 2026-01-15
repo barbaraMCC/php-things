@@ -21,23 +21,46 @@ if ($conn->connect_error) {
 // Récupérer les réservations de l'utilisateur
 $user_id = $_SESSION['user_id'];
 
-$stmt = $conn->prepare("
-    SELECT r.reservation_id AS reservation_id,
-           e.equipment_name AS equipment_name,
-           r.reservation_date,
-           r.start_time,
-           r.end_time,
-           r.status AS status
-    FROM reservation r
-    JOIN equipment e ON r.equipment_id = e.equipment_id
-    WHERE r.user_id = ?
-    ORDER BY r.reservation_date DESC
-");
-$stmt->bind_param("i", $user_id);
+// --- RÉCUPÉRATION DES FILTRES ---
+$filter_equipment = $_GET['equipment'] ?? '';
+$filter_date = $_GET['date'] ?? '';
+$hide_canceled = isset($_GET['hide_canceled']);
+
+// Construction dynamique de la requête
+$sql = "SELECT r.reservation_id, e.equipment_name, r.reservation_date, r.start_time, r.end_time, r.status 
+        FROM reservation r 
+        JOIN equipment e ON r.equipment_id = e.equipment_id 
+        WHERE r.user_id = ?";
+
+$params = [$user_id];
+$types = "i";
+
+if ($filter_equipment !== '') {
+    $sql .= " AND e.equipment_name = ?";
+    $params[] = $filter_equipment;
+    $types .= "s";
+}
+
+if ($filter_date !== '') {
+    $sql .= " AND r.reservation_date = ?";
+    $params[] = $filter_date;
+    $types .= "s";
+}
+
+if ($hide_canceled) {
+    $sql .= " AND r.status != 'canceled'";
+}
+
+$sql .= " ORDER BY r.reservation_date DESC";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param($types, ...$params);
 $stmt->execute();
 $result = $stmt->get_result();
 $now = new DateTime();
 
+// Pour remplir la liste déroulante des équipements
+$eq_list = $conn->query("SELECT equipment_name FROM equipment");
 ?>
 
 <!doctype html>
@@ -75,6 +98,36 @@ $now = new DateTime();
             </div>
         <?php endif; ?>
 
+    <div class="card" style="margin-bottom: 24px;">
+        <form method="GET" action="mybookings.php" class="filter-form">
+        <div class="filter-group">
+            <label>Equipment:</label>
+            <select name="equipment">
+                <option value="">All Equipments</option>
+                <?php while($eq = $eq_list->fetch_assoc()): ?>
+                    <option value="<?= $eq['equipment_name'] ?>" <?= $filter_equipment == $eq['equipment_name'] ? 'selected' : '' ?>>
+                        <?= $eq['equipment_name'] ?>
+                    </option>
+                <?php endwhile; ?>
+            </select>
+        </div>
+
+        <div class = "filter-group">
+            <label >Date</label>
+            <input type="date" name="date" value="<?= $filter_date ?>" style="padding: 7px; border-radius: 6px; border: 1px solid var(--surface-border);">
+        </div>
+
+       <div class="filter-group checkbox-group">
+            <input type="checkbox" name="hide_canceled" id="hide_canceled" <?= $hide_canceled ? 'checked' : '' ?>>
+            <label for="hide_canceled">Hide canceled</label>
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="btn primary">Filter</button>
+            <a href="mybookings.php" class="btn ghost">Reset</a>
+        </div>
+        </form>
+    </div>
           <h2>Your bookings</h2>
           <?php if ($result->num_rows === 0): ?>
               <p class="muted">No bookings yet.</p>

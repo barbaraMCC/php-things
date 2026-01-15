@@ -168,3 +168,62 @@ button.btn-report:hover {
   background: #e2e8f0;
   color: #0f172a;
 }
+
+/* Surcharge de la direction par défaut pour les filtres */
+.filter-form {
+    display: flex !important;
+    flex-direction: row !important; /* Force l'alignement horizontal */
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end; /* Aligne les champs et les boutons sur la même ligne */
+    padding: 8px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 0; /* Évite le décalage */
+}
+
+.filter-group select, 
+.filter-group input[type="date"] {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--surface-border);
+    background: #fff;
+    min-width: 180px;
+}
+
+/* Style spécifique pour la checkbox pour qu'elle soit alignée avec les inputs */
+.checkbox-group {
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: 10px; 
+    gap: 8px;
+}
+
+.checkbox-group label {
+    margin: 0;
+    cursor: pointer;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 10px;
+    margin-left: auto; /* Pousse les boutons à droite si l'écran est large */
+}
+
+.filter-actions .btn {
+    height: 38px; /* Aligne la hauteur avec les inputs */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
