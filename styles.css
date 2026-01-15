@@ -35,8 +35,21 @@ tbody tr{background:var(--card);border-bottom:8px solid transparent}
 tbody tr:nth-child(even){box-shadow:0 1px 0 rgba(15,23,42,0.03) inset}
 .slot{cursor:pointer;border-left:1px solid var(--surface-border)}
 .slot:hover{background:linear-gradient(90deg, rgba(37,99,235,0.05), rgba(6,182,212,0.03))}
-.booked{background:linear-gradient(180deg,var(--booked),#dc2626);color:#fff;font-weight:700;border-radius:6px}
-.booked.mine{box-shadow:0 0 0 3px rgba(34,197,94,0.08)}
+/* Couleur par défaut : pour les autres utilisateurs ou quand on est déconnecté */
+.booked {
+    background: #94a3b8; /* Un bleu-gris doux (Slate 400) */
+    color: #fff;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: not-allowed; /* Indique qu'on ne peut pas cliquer */
+}
+
+/* Vos réservations : en rouge tape-à-l'œil */
+.booked.mine {
+    background: linear-gradient(180deg, var(--booked), #dc2626);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2); /* Halo rouge léger */
+    cursor: pointer;
+}
 
 footer{margin-top:24px;color:var(--muted);max-width:1200px;margin-left:auto;margin-right:auto}
 

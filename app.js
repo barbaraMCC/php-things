@@ -196,11 +196,17 @@ function initModal() {
       _modalResolve = null;
     }
   }
-  window.showConfirm = function(ctitle, cbody) {
+  
+  window.showConfirm = function(ctitle, cbody, okText = 'OK', cancelText = 'Cancel') {
     return new Promise((resolve) => {
       _modalResolve = resolve;
       title.textContent = ctitle || 'Confirm';
       body.textContent = cbody || '';
+      
+      // On change le texte des boutons
+      ok.textContent = okText;
+      cancel.textContent = cancelText;
+
       modal.classList.remove('hidden');
       modal.setAttribute('aria-hidden', 'false');
       modal.style.pointerEvents = 'auto';
@@ -228,7 +234,13 @@ async function toggleBooking(eq, h, existingReservation) {
       alert('This slot is booked by another user.');
       return;
     }
-    const ok = await showConfirm('Cancel booking', `Cancel booking for ${eq} at ${pad(h)}:00?`);
+  
+    const ok = await showConfirm(
+        'Cancel booking', 
+        `Cancel booking for ${eq} at ${pad(h)}:00?`,
+        'Cancel',
+        "Don't cancel"
+    );
     if (!ok) return;
     
     try {
