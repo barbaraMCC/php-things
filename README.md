@@ -83,7 +83,7 @@ Below is a visual overview of the user interface and key features:
 
 | **3. Booking an Equipment** | **4. Booking Multiple Equipments** |
 | :--- | :--- |
-| ![Booking 1 equipment](Booking%201%20equipment.png)<br>Users can select specific time slots to make a single reservation. | ![Booking multi equipments](Booking%20multi%20equipments.png)<br>Support for selecting and reserving multiple slots or different equipment simultaneously. |
+| ![Booking 1 equipment](Booking%201%20equipment.png)<br>Users can select specific time slots to make a single reservation. They cannot select a slot already booked by someone else | ![Booking multi equipments](Booking%20multi%20equipments.png)<br>Support for selecting and reserving multiple slots or different equipment simultaneously. |
 
 | **5. My Bookings** | **6. Report Issue** |
 | :--- | :--- |
